@@ -22,4 +22,5 @@ Investigating task performance of probabilistic topic models: and empirical stud
 https://link-springer-com.proxy2.library.illinois.edu/content/pdf/10.1007/s10791-010-9141-9.pdf
 An Evaluation of Statistical Approaches to Text Categorization
 https://link-springer-com.proxy2.library.illinois.edu/content/pdf/10.1023/A:1009982220290.pdf
-
+Information Retrieval Evaluation
+https://doi.org/10.2200/S00368ED1V01Y201105ICR019)
