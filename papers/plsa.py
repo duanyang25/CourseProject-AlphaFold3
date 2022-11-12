@@ -283,12 +283,15 @@ class Corpus(object):
 def main(selection):
     # Check the current platform to use corresponding styles of paths
     # For Windows
-    documents_path = txtlist(r'.\papers\txts')
+    
     # For Mac OS / Linux
     if platform.system().lower() != "windows":
-        documents_path = './papers/txts'
         global delimiter 
         delimiter = "/"
+        documents_path = txtlist('./papers/txts')
+    else:
+        documents_path = txtlist(r'.\papers\txts')
+        
 
     corpus = Corpus(documents_path)  # instantiate corpus
     corpus.build_corpus()
@@ -303,7 +306,7 @@ def main(selection):
 
     keywords = []
     print(corpus.p_w.sum(axis=1).shape)
-    np.savetxt('output.csv', corpus.p_w.sum(axis=1))
+    np.savetxt("." + delimiter + "papers" + delimiter + 'output.csv', corpus.p_w.sum(axis=1))
     key_index = np.argmax(corpus.p_w.sum(axis=1), axis=1)
     for index in key_index:
         keywords.append(corpus.vocabulary[index])
@@ -311,5 +314,6 @@ def main(selection):
 
 
 if __name__ == '__main__':
-    selection = sys.argv[1]
+    # selection = sys.argv[1]
+    selection = "test"
     main(selection)
