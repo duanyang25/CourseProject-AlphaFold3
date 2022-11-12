@@ -314,5 +314,5 @@ def main(selection):
 
 if __name__ == '__main__':
     # selection = sys.argv[1]
-    selection = "test"
+    selection = "machine learning"
     main(selection)

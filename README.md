@@ -26,3 +26,14 @@ python ./papers/plsa.py "<input words>"
 ```
 ### Server
 ### Chrome Extension
+1. install Node.js and npm first
+2. change the current directory to `google-extension`
+3. run
+```
+npm install
+```
+```
+npm run build
+```
+4. visit `chrome://extensions/` in your Chrome Browser
+5. click `Load unpacked` on the top left side and select the `build` folder in the current directory
