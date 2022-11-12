@@ -1,11 +1,19 @@
+    /*global chrome*/
 import './App.css';
 import React, {useState, useEffect} from "react";
 import { Header, Table} from 'semantic-ui-react'; // header
 import { Input} from 'semantic-ui-react'; // input
+
+
 function App() {
   const [searchInput, setSearchInput] = useState();
   const [search, setSearch] = useState([]);
+
+  // not work, need to use chrome environment
+  var selection = window.getSelection().toString();
+
   const SearchPaper = () => {
+    
   }
   return (
     <div className="App">
