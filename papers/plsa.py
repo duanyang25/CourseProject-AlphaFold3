@@ -282,14 +282,13 @@ class Corpus(object):
 
 def main(selection):
     # Check the current platform to use corresponding styles of paths
-    # For Windows
-    
     # For Mac OS / Linux
     if platform.system().lower() != "windows":
         global delimiter 
         delimiter = "/"
         documents_path = txtlist('./papers/txts')
     else:
+        # For Windows
         documents_path = txtlist(r'.\papers\txts')
         
 
