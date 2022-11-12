@@ -2,6 +2,12 @@ import numpy as np
 import math
 import os
 
+import sys
+import platform
+
+# For Windows
+delimiter = "\\"
+
 def normalize(input_matrix):
     """
     Normalizes the rows of a 2d input_matrix so they sum to 1
@@ -20,7 +26,7 @@ def txtlist(dict_path):
     file_list = []
     for files in os.walk(dict_path):
         for file in files[2]:
-            file_list.append(dict_path + '\\' + file)
+            file_list.append(dict_path + delimiter + file)
 
     return file_list
 
@@ -274,8 +280,16 @@ class Corpus(object):
         # print(self.topic_prob.shape)
         # print(diff)
 
-def main():
-    documents_path = txtlist(r'D:\CS410\CourseProject\papers\txts')
+def main(selection):
+    # Check the current platform to use corresponding styles of paths
+    # For Windows
+    documents_path = txtlist(r'.\papers\txts')
+    # For Mac OS / Linux
+    if platform.system().lower() != "windows":
+        documents_path = './papers/txts'
+        global delimiter 
+        delimiter = "/"
+
     corpus = Corpus(documents_path)  # instantiate corpus
     corpus.build_corpus()
     corpus.build_vocabulary()
@@ -296,6 +310,6 @@ def main():
     print(keywords)
 
 
-
 if __name__ == '__main__':
-    main()
+    selection = sys.argv[1]
+    main(selection)

@@ -30,7 +30,7 @@ def pdflist(dict_path, html_path):
 
 def pdf2html(input_path, html_path):
     doc = fitz.open(input_path)
-    print(doc)
+    # print(doc)
     html_content = ''
     for page in tqdm(doc):
         html_content += page.get_text('html')
@@ -52,7 +52,7 @@ def html2txt(html_path, txt_name):
                     pass
                 else:
                     text+= res[0]
-            print(text)
+            # print(text)
             with open(txt_path + delimiter + txt_name,'a',encoding = 'utf-8')as text_file:
                 text_file.write(text)
                 text_file.write('\n')

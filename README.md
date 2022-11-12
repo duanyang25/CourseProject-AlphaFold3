@@ -12,12 +12,12 @@ pip install -r requirements.txt
 2. Under the root folder of this project, run:
 ```python
 # Mac OS / Linux
-python ./papers/pdfs/pdf2txt.py
+python ./papers/pdf2txt.py
 ```
 OR
 ```python
 # Windows
-python .\papers\pdfs\pdf2txt.py
+python .\papers\pdf2txt.py
 ```
 ### Ranking algorithm
 ### Server
