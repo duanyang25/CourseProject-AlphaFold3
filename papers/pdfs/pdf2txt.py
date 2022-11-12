@@ -4,6 +4,14 @@ from bs4 import BeautifulSoup
 import re
 import os
 
+import platform
+
+# For Windows
+delimiter = "\\"
+dict_path = r'.\papers\pdfs'
+html_path = r'.\papers\html'
+txt_path = r'.\papers\txts'
+
 def pdflist(dict_path, html_path):
     file_list = []
     html_name_list = []
@@ -11,13 +19,13 @@ def pdflist(dict_path, html_path):
     for files in os.walk(dict_path):
         for file in files[2]:
             if os.path.splitext(file)[1] == '.pdf':
-                file_list.append(dict_path + '\\' + file)
+                file_list.append(dict_path + delimiter + file)
                 txt_name_list.append(file.replace('.pdf', '.txt'))
-                html_name_list.append(html_path + '\\' + file.replace('.pdf', '.html'))
+                html_name_list.append(html_path + delimiter + file.replace('.pdf', '.html'))
             elif os.path.splitext(file)[1] == '.PDF':
-                file_list.append(dict_path + '\\' + file)
+                file_list.append(dict_path + delimiter + file)
                 txt_name_list.append(file.replace('.PDF', '.txt'))
-                html_name_list.append(html_path + '\\' + file.replace('.PDF', '.html'))
+                html_name_list.append(html_path + delimiter + file.replace('.PDF', '.html'))
     return file_list, txt_name_list, html_name_list
 
 def pdf2html(input_path, html_path):
@@ -45,21 +53,27 @@ def html2txt(html_path, txt_name):
                 else:
                     text+= res[0]
             print(text)
-            with open(r'D:\CS410\CourseProject\papers\txts' + '\\' + txt_name,'a',encoding = 'utf-8')as text_file:
+            with open(txt_path + delimiter + txt_name,'a',encoding = 'utf-8')as text_file:
                 text_file.write(text)
                 text_file.write('\n')
 
 def main():
-    dict_path = r'D:\CS410\CourseProject\papers\pdfs'
-    html_path = r'D:\CS410\CourseProject\papers\html'
+    # Check the current platform to use corresponding styles of paths
+    # For Mac OS / Linux
+    if platform.system().lower() != "windows":
+        global dict_path 
+        dict_path = "./papers/pdfs"
+        global html_path 
+        html_path = "./papers/html"
+        global txt_path
+        txt_path = "./papers/txts"
+        global delimiter 
+        delimiter = "/"
+
     file_list, txt_name_list, html_name_list = pdflist(dict_path, html_path)
     for i in range(len(file_list)):
         pdf2html(file_list[i], html_name_list[i])
         html2txt(html_name_list[i], txt_name_list[i])
-    # input_path = r'D:\CS410\project\papers\pdfs\A Short Introduction to Learning to Rank.pdf'
-    # html_path = r'D:\CS410\project\papers\pdfs\input.html'
-    # pdf2html(input_path,html_path ) 
-    # html2txt(html_path)
 
 if __name__ == '__main__':
     main()
