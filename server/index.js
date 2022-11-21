@@ -30,11 +30,13 @@ var links = [];
 // Web Crawler
 const rp = require('request-promise');
 const request = require('sync-request');
-const $ = require('cheerio');
+const cheerio = require("cheerio");
 var xpath = require('xpath');
 var dom = require('xmldom').DOMParser;
 let wikiResult = "";
 let wikiUrl = "";
+
+let jsonGoogle;
 
 function getWikiResult (result, url) {
     wikiResult = result;
@@ -87,8 +89,13 @@ function wiki_crawler_sync(selection){
     // Wiki
     var url = 'https://en.wikipedia.org/wiki/' + selection;
     let localResult = "";
-    var html = request('GET', url).getBody("utf8");
+    var html = request('GET', url, {
+        headers: {
+            'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64)  AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36",
+          },
+        }).getBody("utf8");
 
+    // Remove warning messages from result
     // https://stackoverflow.com/questions/56213117/how-to-silent-all-the-warning-messages-of-xml-dom-in-node-js
     var doc = new dom({
         locator: {},
@@ -99,6 +106,7 @@ function wiki_crawler_sync(selection){
 
     var nodes = xpath.select('.//*[@id="mw-content-text"]/div[1]/p[1]', doc); 
 
+    // Concatenate texts from result
     // https://stackoverflow.com/questions/57822599/node-js-xpath-example
     
     nodes.forEach( (n, i) => {
@@ -108,6 +116,48 @@ function wiki_crawler_sync(selection){
     
     wikiResult = localResult;
     wikiUrl = url.replace(" ", "_");
+}
+
+
+function google_crawler_sync(selection){
+    // Web Crawler based on the tutorial for Google Search
+    // https://medium.com/@darshankhandelwal12/how-to-scrape-google-organic-search-results-with-node-js-d3abe0274f40
+
+    // Google Search
+    var url = 'https://www.google.com/search?q=' + selection;
+    let localResult = "";
+    var html = request('GET', url, {
+        headers: {
+            'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64)  AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36",
+          },
+        }).getBody("utf8");
+
+    let $ = cheerio.load(html);
+
+    let titles = [];
+    let links = [];
+    let snippets = [];
+
+    $(".yuRUbf > a > h3").each((i, el) => {
+        titles[i] = $(el).text();
+    });
+    $(".yuRUbf > a").each((i, el) => {
+        links[i] = $(el).attr("href");
+    });
+    $(".g .VwiC3b ").each((i, el) => {
+        snippets[i] = $(el).text();
+    });
+
+    const organicResults = [];
+
+    for (let i = 0; i < titles.length; i++) {
+        organicResults[i] = {
+        title: titles[i],
+        links: links[i],
+        snippet: snippets[i],
+        };
+    }
+    jsonGoogle = organicResults;
 }
 
 
@@ -154,6 +204,7 @@ const server = http.createServer((req, res) => {
     wiki_crawler_sync(test_selection);
     // Google API
     // https://serpapi.com/search-api
+    google_crawler_sync(test_selection);
 
     // create json object with the results from Python with trained ranking models
     var jsonData = {
@@ -173,7 +224,8 @@ const server = http.createServer((req, res) => {
         // ],
         links,
         wikiLink:  wikiUrl,
-        wikiResult: wikiResult
+        wikiResult: wikiResult,
+        googleResult: jsonGoogle,
     };
 
     const jsonContent = JSON.stringify(jsonData);
