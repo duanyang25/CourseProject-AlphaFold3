@@ -27,6 +27,90 @@ const bodyParser = require('body-parser');
 var jsonChild;
 var links = [];
 
+// Web Crawler
+const rp = require('request-promise');
+const request = require('sync-request');
+const $ = require('cheerio');
+var xpath = require('xpath');
+var dom = require('xmldom').DOMParser;
+let wikiResult = "";
+let wikiUrl = "";
+
+function getWikiResult (result, url) {
+    wikiResult = result;
+    wikiUrl = url.replace(" ", "_");
+}
+
+// Async, did not work very well, result in a delay of data extraction
+async function wiki_crawler(selection, callback){
+    // Web Crawler based on Request Promise
+    // https://www.freecodecamp.org/news/the-ultimate-guide-to-web-scraping-with-node-js-daa2027dcd3/
+    // https://github.com/request/request-promise
+
+    // Wiki
+    var url = 'https://en.wikipedia.org/wiki/' + selection;
+    let localResult = "";
+    await rp(url)
+        .then(function(html){
+            //success!
+            // console.log(html);
+
+            // https://stackoverflow.com/questions/56213117/how-to-silent-all-the-warning-messages-of-xml-dom-in-node-js
+            var doc = new dom({
+                locator: {},
+                errorHandler: { warning: function (w) { }, 
+                error: function (e) { }, 
+                fatalError: function (e) { console.error(e) } }
+            }).parseFromString(html);
+
+            var nodes = xpath.select('.//*[@id="mw-content-text"]/div[1]/p[1]', doc); 
+
+            // https://stackoverflow.com/questions/57822599/node-js-xpath-example
+            nodes.forEach( (n, i) => {
+                // console.log(n.textContent);
+                localResult += n.textContent;
+              });
+            
+        })
+        .catch(function(err){
+            //handle error
+        });
+    return callback(localResult, url);
+}
+
+
+function wiki_crawler_sync(selection){
+    // Web Crawler based on Request Promise
+    // https://www.freecodecamp.org/news/the-ultimate-guide-to-web-scraping-with-node-js-daa2027dcd3/
+    // https://github.com/request/request-promise
+
+    // Wiki
+    var url = 'https://en.wikipedia.org/wiki/' + selection;
+    let localResult = "";
+    var html = request('GET', url).getBody("utf8");
+
+    // https://stackoverflow.com/questions/56213117/how-to-silent-all-the-warning-messages-of-xml-dom-in-node-js
+    var doc = new dom({
+        locator: {},
+        errorHandler: { warning: function (w) { }, 
+        error: function (e) { }, 
+        fatalError: function (e) { console.error(e) } }
+    }).parseFromString(html);
+
+    var nodes = xpath.select('.//*[@id="mw-content-text"]/div[1]/p[1]', doc); 
+
+    // https://stackoverflow.com/questions/57822599/node-js-xpath-example
+    
+    nodes.forEach( (n, i) => {
+        // console.log(n.textContent);
+        localResult += n.textContent;
+      });
+    
+    wikiResult = localResult;
+    wikiUrl = url.replace(" ", "_");
+}
+
+
 const server = http.createServer((req, res) => {
     // handle error
     // if (err) {
@@ -50,6 +134,9 @@ const server = http.createServer((req, res) => {
     // parser json, using the above code for the request body if it is json
     // const jsonBody = JSON.parse(body.toString());
 
+    // Test Selection Word
+    // body = ["machine learning"];
+
     // Node.js offical doc for child process: https://nodejs.org/api/child_process.html
     const { spawnSync } = require('node:child_process');
     const predict = spawnSync(`${pythonEnvPath}`, [`${predictPath}`, `${body}`, "hi,12345"], 
@@ -60,9 +147,16 @@ const server = http.createServer((req, res) => {
     // predict.on('close', (code) => {
     //     console.log(`child process exited with code ${code}`);
     //   });
-    
+
+    // Wiki
+
+    let test_selection = "machine learning";
+    wiki_crawler_sync(test_selection);
+    // Google API
+    // https://serpapi.com/search-api
+
     // create json object with the results from Python with trained ranking models
-    const jsonData = {
+    var jsonData = {
         selection: body,
         relevantPapers:
         // [
@@ -78,8 +172,12 @@ const server = http.createServer((req, res) => {
         //     { "pageTitle":"Page3", "link":"https://google.com/scholar/12345" }
         // ],
         links,
-    }
+        wikiLink:  wikiUrl,
+        wikiResult: wikiResult
+    };
+
     const jsonContent = JSON.stringify(jsonData);
+    
 
     // successful status and send the json object to the Chrome Extension
     res.statusCode = 200;
