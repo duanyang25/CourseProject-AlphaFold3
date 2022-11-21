@@ -199,11 +199,10 @@ const server = http.createServer((req, res) => {
     //   });
 
     // Wiki
-
     let test_selection = "machine learning";
     wiki_crawler_sync(test_selection);
-    // Google API
-    // https://serpapi.com/search-api
+    
+    // Google Search
     google_crawler_sync(test_selection);
 
     // create json object with the results from Python with trained ranking models
