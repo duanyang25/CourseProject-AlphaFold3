@@ -16,64 +16,51 @@ const wiki = document.querySelector(".wiki");
 const scholar = document.querySelector(".scholar");
 const google = document.querySelector(".google");
 
-
-const cases = document.querySelector(".cases");
-const recovered = document.querySelector(".recovered");
-const deaths = document.querySelector(".deaths");
-
 results.style.display = "none";
 loading.style.display = "none";
 errors.textContent = "";
 // grab the form
 const form = document.querySelector(".form-data");
-// grab the country name
-const country = document.querySelector(".country-name");
+// grab the key words
+const textbox = document.querySelector(".textbox-input");
 
-// declare a method to search by country name
-const searchForCountry = async countryName => {
+// declare a method to search by key words
+const searchForKeyWords = async textboxValue => {
   loading.style.display = "block";
   errors.textContent = "";
 
   try {
-    let response = await axios.get(`${api}/${countryName}`);
-    loading.style.display = "none";
-
-    cases.textContent = response.data.confirmed.value;
-    recovered.textContent = response.data.recovered.value;
-    // deaths.textContent = response.data.deaths.value;
-
     const stringResponse = await axios({
       method: 'post',
       url: `${server}`,
       data: {
-        selection: countryName
+        selection: textboxValue
       },
       responseType:'json',
     });
-    deaths.textContent = stringResponse["relevantPapers"];
-    // loading.style.display = "none";
+    let jsonResponse = stringResponse.data;
 
-    // selection.textContent = response["selection"];
-    // papers.textContent = response["relevantPapers"];
-    // wiki.textContent = response["wikiResult"];
+    selection.textContent = jsonResponse["selection"];
+    papers.textContent = jsonResponse["relevantPapers"];
+    wiki.textContent = jsonResponse["wikiResult"];
 
-    // scholar.textContent = response["scholarResults"];
-    // google.textContent = response["googleResult"];
+    scholar.textContent = jsonResponse["scholarResults"];
+    google.textContent = jsonResponse["googleResult"];
 
-
+    loading.style.display = "none";
     results.style.display = "block";
   } catch (error) {
     loading.style.display = "none";
     results.style.display = "none";
-    errors.textContent = "We have no data for the country you have requested.";
+    errors.textContent = "Error!";
   }
 };
 
 // declare a function to handle form submission
 const handleSubmit = async e => {
   e.preventDefault();
-  searchForCountry(country.value);
-  console.log(country.value);
+  searchForKeyWords(textbox.value);
+  console.log(textbox.value);
 };
 
 form.addEventListener("submit", e => handleSubmit(e));
