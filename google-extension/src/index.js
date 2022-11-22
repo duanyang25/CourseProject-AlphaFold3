@@ -2,8 +2,6 @@
 // https://dev.to/debosthefirst/how-to-build-a-chrome-extension-that-makes-api-calls-1g04
 // https://github.com/onedebos/covtension
 import axios from "axios";
-const api = "https://covid19.mathdro.id/api/countries";
-
 const server = "http://127.0.0.1:4100/";
 
 const errors = document.querySelector(".errors");
@@ -19,6 +17,7 @@ const google = document.querySelector(".google");
 results.style.display = "none";
 loading.style.display = "none";
 errors.textContent = "";
+
 // grab the form
 const form = document.querySelector(".form-data");
 // grab the key words
