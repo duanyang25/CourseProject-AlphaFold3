@@ -209,7 +209,7 @@ const server = http.createServer((req, res) => {
     //the whole response has been received, so we just print it out here
     req.on('end', function () {
         let jsonRequest = JSON.parse(body);
-        // console.log(jsonRequest["selection"]);
+        console.log("Selection: " + jsonRequest["selection"]);
         let selection = jsonRequest["selection"];
     // body = Buffer.concat(body + ["TEST: Hi there."]).toString();
     // console.log(body);
@@ -269,6 +269,8 @@ const server = http.createServer((req, res) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     res.end(jsonContent);
+
+    // console.log(jsonContent);
     });
 });
 
