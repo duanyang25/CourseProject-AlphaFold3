@@ -30,6 +30,9 @@ python ./papers/plsa.py "<input words>"
 2. change the current directory to `google-extension`
 3. run
 ```
+export NODE_OPTIONS=--openssl-legacy-provider
+```
+```
 npm install
 ```
 ```

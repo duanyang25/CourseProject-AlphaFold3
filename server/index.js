@@ -37,7 +37,7 @@ let wikiResult = "";
 let wikiUrl = "";
 
 let jsonGoogle;
-
+let jsonScholar;
 function getWikiResult (result, url) {
     wikiResult = result;
     wikiUrl = url.replace(" ", "_");
@@ -160,6 +160,33 @@ function google_crawler_sync(selection){
     jsonGoogle = organicResults;
 }
 
+function scholar_crawler_sync(selection){
+    // Web Crawler based on the tutorial for Google Scholar
+    // https://serpapi.com/blog/how-to-scrape-google-scholar-organic-results-with-node-js/
+
+    // Google Scholar
+    var url = 'https://scholar.google.com/scholar?q=' + selection;
+    let localResult = "";
+    var html = request('GET', url, {
+        headers: {
+            'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64)  AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36",
+          },
+        }).getBody("utf8");
+
+    let $ = cheerio.load(html);
+
+    const organicResults = Array.from($(".gs_r.gs_scl")).map((el) => {
+        return {
+        title: $(el).find(".gs_rt").text().trim(),
+        link: $(el).find(".gs_rt a").attr("href") || "link not available",
+        publication_info: $(el).find(".gs_a").text().trim(),
+        snippet: $(el).find(".gs_rs").text().trim().replace("\n", "")
+        };
+    });
+    jsonScholar = organicResults;
+
+}
+
 
 const server = http.createServer((req, res) => {
     // handle error
@@ -172,15 +199,20 @@ const server = http.createServer((req, res) => {
     // https://nodejs.org/en/docs/guides/anatomy-of-an-http-transaction/
     // extract the body of request
     // assume plain text
-    let body = [];
-    req.on('data', (chunk) => {
-        body.push(chunk);
-    }).on('end', () => {
-        body = Buffer.concat(body).toString();
-        // at this point, `body` has the entire request body stored in it as a string
-    });
-    // body = Buffer.concat(body + ["TEST: Hi there."]).toString();
+    // https://nodejs.org/en/knowledge/HTTP/clients/how-to-create-a-HTTP-request/
+    var body = '';
 
+    //another chunk of data has been received, so append it to `str`
+    req.on('data', function (chunk) {
+        body += chunk;
+    });
+    //the whole response has been received, so we just print it out here
+    req.on('end', function () {
+        let jsonRequest = JSON.parse(body);
+        // console.log(jsonRequest["selection"]);
+        let selection = jsonRequest["selection"];
+    // body = Buffer.concat(body + ["TEST: Hi there."]).toString();
+    // console.log(body);
     // parser json, using the above code for the request body if it is json
     // const jsonBody = JSON.parse(body.toString());
 
@@ -189,7 +221,7 @@ const server = http.createServer((req, res) => {
 
     // Node.js offical doc for child process: https://nodejs.org/api/child_process.html
     const { spawnSync } = require('node:child_process');
-    const predict = spawnSync(`${pythonEnvPath}`, [`${predictPath}`, `${body}`, "hi,12345"], 
+    const predict = spawnSync(`${pythonEnvPath}`, [`${predictPath}`, `${selection}`, "hi,12345"], 
                                 {encoding: 'utf-8'});
     const output = predict.stdout;
     jsonChild = JSON.parse(output); 
@@ -199,15 +231,18 @@ const server = http.createServer((req, res) => {
     //   });
 
     // Wiki
-    let test_selection = "machine learning";
-    wiki_crawler_sync(test_selection);
+    // let test_selection = "machine learning";
+    wiki_crawler_sync(selection);
     
     // Google Search
-    google_crawler_sync(test_selection);
+    google_crawler_sync(selection);
+    
+    // Google Scholar
+    scholar_crawler_sync(selection);
 
     // create json object with the results from Python with trained ranking models
     var jsonData = {
-        selection: body,
+        selection: selection,
         relevantPapers:
         // [
         //     { "paperTitle":"Paper1", "abstract":"One algorithm1", "link":"https://acm.com/doi/12345" },
@@ -221,7 +256,7 @@ const server = http.createServer((req, res) => {
         //     { "pageTitle":"Page2", "link":"https://google.com/scholar/12345" },
         //     { "pageTitle":"Page3", "link":"https://google.com/scholar/12345" }
         // ],
-        links,
+        jsonScholar,
         wikiLink:  wikiUrl,
         wikiResult: wikiResult,
         googleResult: jsonGoogle,
@@ -232,9 +267,9 @@ const server = http.createServer((req, res) => {
 
     // successful status and send the json object to the Chrome Extension
     res.statusCode = 200;
-    res.setHeader("content-type", "application/json")
-    res.end(jsonContent)
-
+    res.setHeader('Content-Type', 'application/json');
+    res.end(jsonContent);
+    });
 });
 
 // start the web server

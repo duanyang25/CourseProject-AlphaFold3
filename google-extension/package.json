@@ -19,7 +19,6 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "axios": "^0.19.2",
-    "sync-request": "^6.1.0"
+    "axios": "^0.19.2"
   }
 }
