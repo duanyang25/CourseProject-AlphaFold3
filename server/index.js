@@ -264,7 +264,7 @@ const server = http.createServer((req, res) => {
 
     const jsonContent = JSON.stringify(jsonData);
     
-
+    // console.log(jsonData)
     // successful status and send the json object to the Chrome Extension
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
