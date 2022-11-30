@@ -10,7 +10,6 @@ const results = document.querySelector(".result-container");
 
 const selection = document.querySelector(".selection");
 const papers = document.querySelector(".papers");
-const wiki = document.querySelector(".wiki");
 const scholar = document.querySelector(".scholar");
 const google = document.querySelector(".google");
 
@@ -41,7 +40,6 @@ const searchForKeyWords = async textboxValue => {
 
     selection.textContent = jsonResponse["selection"];
     papers.textContent = jsonResponse["relevantPapers"];
-    wiki.textContent = jsonResponse["wikiResult"];
 
     scholar.textContent = jsonResponse["scholarResults"];
     google.textContent = jsonResponse["googleResult"];
