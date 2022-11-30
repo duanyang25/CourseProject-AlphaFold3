@@ -208,69 +208,91 @@ const server = http.createServer((req, res) => {
     });
     //the whole response has been received, so we just print it out here
     req.on('end', function () {
-        let jsonRequest = JSON.parse(body);
-        console.log("Selection: " + jsonRequest["selection"]);
-        let selection = jsonRequest["selection"];
-    // body = Buffer.concat(body + ["TEST: Hi there."]).toString();
-    // console.log(body);
-    // parser json, using the above code for the request body if it is json
-    // const jsonBody = JSON.parse(body.toString());
+        try{
+            let jsonRequest = JSON.parse(body);
+            console.log("Selection: " + jsonRequest["selection"]);
+            let selection = jsonRequest["selection"];
+            // body = Buffer.concat(body + ["TEST: Hi there."]).toString();
+            // console.log(body);
+            // parser json, using the above code for the request body if it is json
+            // const jsonBody = JSON.parse(body.toString());
 
-    // Test Selection Word
-    // body = ["machine learning"];
+            // Test Selection Word
+            // body = ["machine learning"];
 
-    // Node.js offical doc for child process: https://nodejs.org/api/child_process.html
-    const { spawnSync } = require('node:child_process');
-    const predict = spawnSync(`${pythonEnvPath}`, [`${predictPath}`, `${selection}`, "hi,12345"], 
-                                {encoding: 'utf-8'});
-    const output = predict.stdout;
-    jsonChild = JSON.parse(output); 
-      
-    // predict.on('close', (code) => {
-    //     console.log(`child process exited with code ${code}`);
-    //   });
+            // Node.js offical doc for child process: https://nodejs.org/api/child_process.html
+            const { spawnSync } = require('node:child_process');
+            const predict = spawnSync(`${pythonEnvPath}`, [`${predictPath}`, `${selection}`, "hi,12345"], 
+                                        {encoding: 'utf-8'});
+            const output = predict.stdout;
+            jsonChild = JSON.parse(output); 
+            
+            // predict.on('close', (code) => {
+            //     console.log(`child process exited with code ${code}`);
+            //   });
 
-    // Wiki
-    // let test_selection = "machine learning";
-    wiki_crawler_sync(selection);
-    
-    // Google Search
-    google_crawler_sync(selection);
-    
-    // Google Scholar
-    scholar_crawler_sync(selection);
+            // Wiki
+            // let test_selection = "machine learning";
+            // wiki_crawler_sync(selection);
+            
+            // Google Search
+            google_crawler_sync(selection);
+            
+            // Google Scholar
+            scholar_crawler_sync(selection);
 
-    // create json object with the results from Python with trained ranking models
-    var jsonData = {
-        selection: selection,
-        relevantPapers:
-        // [
-        //     { "paperTitle":"Paper1", "abstract":"One algorithm1", "link":"https://acm.com/doi/12345" },
-        //     { "paperTitle":"Paper2", "abstract":"One algorithm2", "link":"https://acm.com/doi/12345" },
-        //     { "paperTitle":"Paper3", "abstract":"One algorithm3", "link":"https://acm.com/doi/12345" }
-        // ],
-        jsonChild["papers"],
-        scholarResults:
-        // [
-        //     { "pageTitle":"Page1", "link":"https://google.com/scholar/12345" },
-        //     { "pageTitle":"Page2", "link":"https://google.com/scholar/12345" },
-        //     { "pageTitle":"Page3", "link":"https://google.com/scholar/12345" }
-        // ],
-        jsonScholar,
-        wikiLink:  wikiUrl,
-        wikiResult: wikiResult,
-        googleResult: jsonGoogle,
-    };
+            // create json object with the results from Python with trained ranking models
+            var jsonData = {
+                selection: selection,
+                relevantPapers:
+                // [
+                //     { "paperTitle":"Paper1", "abstract":"One algorithm1", "link":"https://acm.com/doi/12345" },
+                //     { "paperTitle":"Paper2", "abstract":"One algorithm2", "link":"https://acm.com/doi/12345" },
+                //     { "paperTitle":"Paper3", "abstract":"One algorithm3", "link":"https://acm.com/doi/12345" }
+                // ],
+                jsonChild["papers"],
+                scholarResults:
+                // [
+                //     { "pageTitle":"Page1", "link":"https://google.com/scholar/12345" },
+                //     { "pageTitle":"Page2", "link":"https://google.com/scholar/12345" },
+                //     { "pageTitle":"Page3", "link":"https://google.com/scholar/12345" }
+                // ],
+                jsonScholar,
+                // wikiLink:  wikiUrl,
+                // wikiResult: wikiResult,
+                googleResult: jsonGoogle,
+            };
 
-    const jsonContent = JSON.stringify(jsonData);
-    
-    // console.log(jsonData)
-    // successful status and send the json object to the Chrome Extension
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/json');
-    res.end(jsonContent);
+            const jsonContent = JSON.stringify(jsonData);
+            
+            // console.log(jsonData)
+            // successful status and send the json object to the Chrome Extension
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(jsonContent);
 
-    // console.log(jsonContent);
+            // console.log(jsonContent);
+        } catch (error) {
+            console.log("Error!");
+            console.log(error.message.split('\n')[0]);
+
+            res.statusCode = 502;
+            res.setHeader('Content-Type', 'application/json');
+
+            let jsonRequest = JSON.parse(body);
+            let selection = jsonRequest["selection"];
+
+            var jsonData = {
+                selection: selection,
+                relevantPapers: null,
+                scholarResults: null,
+                googleResult: null,
+                error: 1,
+                errorMessage: error.message.split('\n')[0]
+            };
+            const jsonContent = JSON.stringify(jsonData);
+            res.end(jsonContent);
+        }
     });
 });
 
