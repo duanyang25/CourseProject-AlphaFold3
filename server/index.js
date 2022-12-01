@@ -23,6 +23,7 @@ readline.question(`What is the path of your Python Virtual Environment Bin conta
 // Path of ranking model prediction file
 var predictPath = "./test.py";
 
+const os = require("os");
 if (os.platform() == "win32") {
     predictPath = ".\\test.py";
 }
