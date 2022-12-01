@@ -25,7 +25,7 @@ var predictPath = "./test.py";
 
 const os = require("os");
 if (os.platform() == "win32") {
-    predictPath = ".\\test.py";
+    predictPath = "test.py";
 }
 
 // Parse Json
