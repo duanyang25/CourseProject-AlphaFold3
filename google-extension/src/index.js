@@ -70,9 +70,9 @@ const searchForKeyWords = async textboxValue => {
     let text2 = '';
         jsonResponse["googleResult"].forEach((ele, ind) =>{
             console.log(ele);
-            text2 += `${ele.title.slice(0, 10)}
-                     ${ele.links.slice(0, 10)}
-                     ${ele.snippet.slice(0, 10)} `;
+            text2 += `${ele.title.slice(0, 20)}
+                     ${ele.links.slice(0, 20)}
+                     ${ele.snippet.slice(0, 20)} `;
         })
     google.textContent = text2;
 
