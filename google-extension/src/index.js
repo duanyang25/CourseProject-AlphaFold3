@@ -41,8 +41,40 @@ const searchForKeyWords = async textboxValue => {
     selection.textContent = jsonResponse["selection"];
     papers.textContent = jsonResponse["relevantPapers"];
 
+    let text = '';
+    jsonResponse["relevantPapers"].forEach((ele, ind) =>{
+        console.log(ele);
+//        text += `${ele.paperTitle.slice(0, 20)}
+//                 ${ele.abstract.slice(0, 20) }
+//                 ${ele.link.slice(0, 20) } `;
+          text +=  ele.paperTitle.slice(0, 30) + "\n" +
+                   ele.abstract.slice(0, 30) + "\n" +
+                   ele.link.slice(0, 30)+ "\n"  ;
+    })
+    papers.textContent = text;
+
     scholar.textContent = jsonResponse["scholarResults"];
+
+    let text1 = '';
+        jsonResponse["scholarResults"].forEach((ele, ind) =>{
+            console.log(ele);
+            text1 += ` ${ele.title.slice(0, 20)}
+                       ${ele.link.slice(0, 20)}
+                      ${ele.publication_info.slice(0, 20)}
+                      ${ele.snippet.slice(0, 20)}`;
+        })
+    scholar.textContent = text1;
+
     google.textContent = jsonResponse["googleResult"];
+
+    let text2 = '';
+        jsonResponse["googleResult"].forEach((ele, ind) =>{
+            console.log(ele);
+            text2 += `${ele.title.slice(0, 10)}
+                     ${ele.links.slice(0, 10)}
+                     ${ele.snippet.slice(0, 10)} `;
+        })
+    google.textContent = text2;
 
     loading.style.display = "none";
     results.style.display = "block";
