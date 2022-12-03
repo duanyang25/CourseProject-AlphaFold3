@@ -19,8 +19,8 @@ def main(selection):
     prob_matrix = np.loadtxt("prob_matrix.txt")
     vocab = np.loadtxt("vocabulary.txt", dtype= 'str', delimiter=' ', encoding='utf-8')
     vocab = list(vocab)
-    print(len(vocab))
-    print(prob_matrix.shape)
+    # print(len(vocab))
+    # print(prob_matrix.shape)
     query_words = selection.split()
     paper_index = []
     flag = 0
@@ -31,8 +31,14 @@ def main(selection):
                 flag = 1
                 break
     if flag == 0:
-        print('No Relative Papers')
-        return -1
+        j = {
+            "papers":
+                    [
+                        { "paperTitle":'', "abstract":'', "link":''}
+                    ]
+            }
+        print(json.dumps(j))
+        return
 
     file_list = []
     file = open(dict_path + delimiter + 'links.txt', 'r', encoding='utf-8')
