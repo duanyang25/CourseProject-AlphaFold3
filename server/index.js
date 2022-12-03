@@ -5,6 +5,8 @@ const hostname = "127.0.0.1";
 const port = 4100;
 console.log(`Sever running at http://${hostname}:${port}/`);
 
+
+
 // Node.js official doc for input: https://nodejs.dev/en/learn/accept-input-from-the-command-line-in-nodejs/
 const readline = require('readline').createInterface({
     input: process.stdin,
@@ -19,7 +21,12 @@ readline.question(`What is the path of your Python Virtual Environment Bin conta
 });
 
 // Path of ranking model prediction file
-const predictPath = "./test.py";
+var predictPath = "./test.py";
+
+const os = require("os");
+if (os.platform() == "win32") {
+    predictPath = "test.py";
+}
 
 // Parse Json
 const bodyParser = require('body-parser'); 

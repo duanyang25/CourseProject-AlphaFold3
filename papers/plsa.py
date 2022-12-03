@@ -1,7 +1,7 @@
 import numpy as np
 import math
 import os
-
+import re
 import sys
 import platform
 
@@ -69,7 +69,7 @@ class Corpus(object):
             document_content = []
             counter = 0
             for line in file.readlines():
-                if counter > 100:
+                if counter > 1000:
                     break
                 line = line.strip('\n')
                 line = line.split()
@@ -92,10 +92,10 @@ class Corpus(object):
         # #############################
         for line in self.documents:
             for word in line:
-                if word not in self.vocabulary and word != '0' and word != '1':
+                if word not in self.vocabulary and word != ' ' and word != '':
                     self.vocabulary.append(word)
                     self.vocabulary_size += 1
-        
+        print(self.vocabulary_size)
 
 
     def build_term_doc_matrix(self):
@@ -178,7 +178,7 @@ class Corpus(object):
         temp = self.p_w.sum(axis=1)
         temp[temp == 0] = 1
         self.topic_prob = self.p_w / temp.reshape(D, 1, W)
-        # print(self.topic_prob.shape)
+        # print(self.topic_prob)
             
 
     def maximization_step(self, number_of_topics):
@@ -291,11 +291,9 @@ def main(selection):
         # For Windows
         documents_path = txtlist(r'.\papers\txts')
         
-
     corpus = Corpus(documents_path)  # instantiate corpus
     corpus.build_corpus()
     corpus.build_vocabulary()
-    print(corpus.vocabulary)
     print("Vocabulary size:" + str(len(corpus.vocabulary)))
     print("Number of documents:" + str(len(corpus.documents)))
     number_of_topics = 10
@@ -303,15 +301,14 @@ def main(selection):
     epsilon = 0.001
     corpus.plsa(number_of_topics, max_iterations, epsilon)
 
-    keywords = []
-    print(corpus.p_w.sum(axis=1).shape)
-    np.savetxt("." + delimiter + "papers" + delimiter + 'output.csv', corpus.p_w.sum(axis=1))
-    key_index = np.argmax(corpus.p_w.sum(axis=1), axis=1)
-    for index in key_index:
-        keywords.append(corpus.vocabulary[index])
-    print(keywords)
-
-
+    # print(corpus.p_w.sum(axis=1).shape)
+    prob_matrix = corpus.p_w.sum(axis=1)
+    vocab = np.array(corpus.vocabulary)
+    np.savetxt("prob_matrix.txt", prob_matrix)
+    np.savetxt("vocabulary.txt", vocab, fmt='%s', encoding='utf-8')
+    # print(corpus.vocabulary[0])
+    print(vocab.shape)
+    print(prob_matrix.shape)
 if __name__ == '__main__':
     # selection = sys.argv[1]
     selection = "machine learning"

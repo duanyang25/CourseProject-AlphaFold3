@@ -39,21 +39,21 @@ def pdf2html(input_path, html_path):
         fp.write(html_content)
 
 def html2txt(html_path, txt_name):
-    html_file = open(html_path, 'r', encoding = 'utf-8')
-    htmlhandle = html_file.read()
+    hfile = open(html_path, 'r', encoding = 'utf-8')
+    htmlhandle = hfile.read()
     soup = BeautifulSoup(htmlhandle, "html.parser")
-    for div in soup.find_all('div'):
-        for p in div:
+    for i in soup.find_all('div'):
+        for j in i:
             text = str()
-            for span in p:
-                p_info = '<span .*?>(.*?)</span>'
-                res = re.findall(p_info,str(span))
-                if len(res) ==0:
+            for k in j:
+                p = '<span .*?>(.*?)</span>'
+                result = re.findall(p,str(k))
+                if len(result) == 0:
                     pass
                 else:
-                    text+= res[0]
+                    text += result[0]
             # print(text)
-            with open(txt_path + delimiter + txt_name,'a',encoding = 'utf-8')as text_file:
+            with open(txt_path + delimiter + txt_name,'a',encoding = 'utf-8') as text_file:
                 text_file.write(text)
                 text_file.write('\n')
 
