@@ -71,6 +71,12 @@ npm install
 export NODE_OPTIONS=--openssl-legacy-provider
 npm run build
 ```
+For windows cmd, run:
+```
+set NODE_OPTIONS=--openssl-legacy-provider
+npm run build
+```
+
 4. visit `chrome://extensions/` in your Chrome Browser
 5. click `Load unpacked` on the top left side and select the `dist` folder in the current directory
 ### Usage

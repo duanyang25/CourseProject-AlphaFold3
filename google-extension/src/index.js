@@ -13,6 +13,7 @@ const papers = document.querySelector(".papers");
 const scholar = document.querySelector(".scholar");
 const google = document.querySelector(".google");
 
+
 results.style.display = "none";
 loading.style.display = "none";
 errors.textContent = "";
@@ -39,42 +40,58 @@ const searchForKeyWords = async textboxValue => {
     let jsonResponse = stringResponse.data;
 
     selection.textContent = jsonResponse["selection"];
-    papers.textContent = jsonResponse["relevantPapers"];
 
+    // papers.textContent = jsonResponse["relevantPapers"];
     let text = '';
     jsonResponse["relevantPapers"].forEach((ele, ind) =>{
+      if (ind<5){
         console.log(ele);
-//        text += `${ele.paperTitle.slice(0, 20)}
-//                 ${ele.abstract.slice(0, 20) }
-//                 ${ele.link.slice(0, 20) } `;
-          text +=  ele.paperTitle.slice(0, 30) + "\n" +
-                   ele.abstract.slice(0, 30) + "\n" +
-                   ele.link.slice(0, 30)+ "\n"  ;
+        text += '<p><a href='+ ele.link +'target=\"_blank\">'+ ele.paperTitle + '</a>'+ 
+                ': ' + ele.abstract + '</p>';
+      }
+        // console.log(ele);
+      //  text += `${ele.paperTitle.slice(0, 30)}
+      //           ${ele.abstract.slice(0, 30) }
+      //           ${ele.link.slice(0, 30) } `;
+          // text +=  ele.paperTitle.slice(0, 30) + "\n" +
+          //          ele.abstract.slice(0, 30) + "\n" +
+          //          ele.link.slice(0, 30)+ "\n"  ;
     })
-    papers.textContent = text;
+    // papers.textContent = text;
+    papers.textContent = 'Relevant Papers:' ;
+    document.getElementById("papersroutput").innerHTML = text;
 
-    scholar.textContent = jsonResponse["scholarResults"];
-
+    // scholar.textContent = jsonResponse["scholarResults"];
     let text1 = '';
         jsonResponse["scholarResults"].forEach((ele, ind) =>{
+          if (ind<5){
             console.log(ele);
-            text1 += ` ${ele.title.slice(0, 20)}
-                       ${ele.link.slice(0, 20)}
-                      ${ele.publication_info.slice(0, 20)}
-                      ${ele.snippet.slice(0, 20)}`;
+            text1 += '<p><a href='+ ele.link +'target=\"_blank\">'+ ele.title + '</a>'+ 
+                      ': ' + ele.snippet + 
+                      '----' + ele.publication_info + '</p>';
+          }
+            // console.log(ele);
+            // text1 += ` ${ele.title.slice(0, 20)}
+            //            ${ele.link.slice(0, 20)}
+            //           ${ele.publication_info.slice(0, 20)}
+            //           ${ele.snippet.slice(0, 20)}`;
         })
-    scholar.textContent = text1;
+    // scholar.textContent = text1;
+    scholar.textContent = 'Google Scholar Results:' ;
+    document.getElementById("scholaroutput").innerHTML = text1;
 
-    google.textContent = jsonResponse["googleResult"];
 
     let text2 = '';
         jsonResponse["googleResult"].forEach((ele, ind) =>{
+          if (ind<5){
             console.log(ele);
-            text2 += `${ele.title.slice(0, 20)}
-                     ${ele.links.slice(0, 20)}
-                     ${ele.snippet.slice(0, 20)} `;
+            text2 += '<p><a href='+ ele.links +'target=\"top\">'+ ele.title + '</a>'+ 
+                      ': ' + ele.snippet + '</p>';
+          }
         })
-    google.textContent = text2;
+    google.textContent = 'Google Search Results:' ;
+    document.getElementById("googleoutput").innerHTML = text2;
+
 
     loading.style.display = "none";
     results.style.display = "block";
