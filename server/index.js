@@ -13,20 +13,21 @@ const readline = require('readline').createInterface({
     output: process.stdout,
 });
 
-var pythonEnvPath;
-readline.question(`What is the path of your Python Virtual Environment Bin containing MetaKit? e.g. /usr/bin/python3\n`, answer => {
-    pythonEnvPath = answer;
-    console.log(`Set Python and Env as ${pythonEnvPath}!`);
-    readline.close();
-});
+var pythonEnvPath = "python";
+// readline.question(`What is the path of your Python Virtual Environment Bin containing MetaKit? e.g. /usr/bin/python3\n`, answer => {
+//     pythonEnvPath = answer;
+//     console.log(`Set Python and Env as ${pythonEnvPath}!`);
+//     readline.close();
+// });
 
 // Path of ranking model prediction file
-var predictPath = "./test.py";
-
-const os = require("os");
-if (os.platform() == "win32") {
-    predictPath = "test.py";
-}
+const path = require("path");
+var predictPath = "main.py";
+var workingFolder = ".." + path.sep + "papers";
+// const os = require("os");
+// if (os.platform() == "win32") {
+//     predictPath = "test.py";
+// }
 
 // Parse Json
 const bodyParser = require('body-parser'); 
@@ -229,10 +230,12 @@ const server = http.createServer((req, res) => {
 
             // Node.js offical doc for child process: https://nodejs.org/api/child_process.html
             const { spawnSync } = require('node:child_process');
-            const predict = spawnSync(`${pythonEnvPath}`, [`${predictPath}`, `${selection}`, "hi,12345"], 
-                                        {encoding: 'utf-8'});
+            const predict = spawnSync(`${pythonEnvPath}`, [`${predictPath}`, `${selection}`], 
+                                        {encoding: 'utf-8', cwd: `${workingFolder}`});
             const output = predict.stdout;
+            // console.log(output);
             jsonChild = JSON.parse(output); 
+            
             
             // predict.on('close', (code) => {
             //     console.log(`child process exited with code ${code}`);

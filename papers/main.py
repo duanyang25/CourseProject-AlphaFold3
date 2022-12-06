@@ -28,7 +28,7 @@ def main(selection):
         for i in range(len(vocab)):
             if word in vocab[i]:
                 paper_index.append(np.argmax(prob_matrix[:, i]))
-                print(prob_matrix[1,i], np.argmax(prob_matrix[:, i]))
+                # print(prob_matrix[1,i], np.argmax(prob_matrix[:, i]))
                 flag = 1
                 break
     if flag == 0:
@@ -38,7 +38,7 @@ def main(selection):
                         { "paperTitle":'', "abstract":'', "link":''}
                     ]
             }
-        print(json.dumps(j))
+        print(json.dumps(j), end="")
         return
 
     file_list = []
@@ -100,7 +100,7 @@ def main(selection):
         }
 
         # print out json
-        print(json.dumps(j))
+        print(json.dumps(j), end="")
     elif len(paper_index) > 1:
         j = {
             "papers":
@@ -109,7 +109,7 @@ def main(selection):
                         { "paperTitle":file_list[paper_index[1] * 2], "abstract":content2, "link":file_list[paper_index[1] * 2 + 1]}
                     ]
         }
-        print(json.dumps(j))
+        print(json.dumps(j), end="")
     return
 
 if __name__ == '__main__':
