@@ -126,18 +126,24 @@ function wiki_crawler_sync(selection){
     wikiUrl = url.replace(" ", "_");
 }
 
+// https://medium.com/@darshankhandelwal12/how-to-scrape-google-organic-search-results-with-node-js-d3abe0274f40
+const selectRandom = () => {
+    const userAgents =  ["Mozilla/5.0 (Windows NT 10.0; Win64; x64)  AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36",     "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36",     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36",     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36",     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36"];
+    var randomNumber = Math.floor(Math.random() * userAgents.length);     return userAgents[randomNumber];     
+    }       
 
 function google_crawler_sync(selection){
     // Web Crawler based on the tutorial for Google Search
     // https://medium.com/@darshankhandelwal12/how-to-scrape-google-organic-search-results-with-node-js-d3abe0274f40
 
+    let user_agent = selectRandom();
     // Google Search
     var url = 'https://www.google.com/search?q=' + selection;
     let localResult = "";
     var html = request('GET', url, {
         headers: {
-            'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64)  AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36",
-          },
+            'user-agent': `${user_agent}`,
+            },
         }).getBody("utf8");
 
     let $ = cheerio.load(html);
@@ -172,13 +178,14 @@ function scholar_crawler_sync(selection){
     // Web Crawler based on the tutorial for Google Scholar
     // https://serpapi.com/blog/how-to-scrape-google-scholar-organic-results-with-node-js/
 
+    let user_agent = selectRandom();
     // Google Scholar
     var url = 'https://scholar.google.com/scholar?q=' + selection;
     let localResult = "";
     var html = request('GET', url, {
         headers: {
-            'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64)  AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36",
-          },
+            'user-agent': `${user_agent}`,
+            },
         }).getBody("utf8");
 
     let $ = cheerio.load(html);
