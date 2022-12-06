@@ -69,7 +69,7 @@ class Corpus(object):
             document_content = []
             counter = 0
             for line in file.readlines():
-                if counter > 1000:
+                if counter > 100:
                     break
                 line = line.strip('\n')
                 line = line.split()
@@ -304,11 +304,12 @@ def main(selection):
     # print(corpus.p_w.sum(axis=1).shape)
     prob_matrix = corpus.p_w.sum(axis=1)
     vocab = np.array(corpus.vocabulary)
-    np.savetxt("prob_matrix.txt", prob_matrix)
-    np.savetxt("vocabulary.txt", vocab, fmt='%s', encoding='utf-8')
+    # np.savetxt("prob_matrix.txt", prob_matrix)
+    # np.savetxt("vocabulary.txt", vocab, fmt='%s', encoding='utf-8')
     # print(corpus.vocabulary[0])
     print(vocab.shape)
     print(prob_matrix.shape)
+    # print(corpus.documents)
 if __name__ == '__main__':
     # selection = sys.argv[1]
     selection = "machine learning"
