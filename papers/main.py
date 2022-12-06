@@ -7,8 +7,9 @@ import sys
 delimiter = "\\"
 dict_path = r'.\pdfs'
 txt_path = r'.\txts'
-
 def main(selection):
+    content = ''
+    content2 = ''
     if platform.system().lower() != "windows":
         global dict_path 
         dict_path = "./pdfs"
@@ -36,7 +37,7 @@ def main(selection):
         j = {
             "papers":
                     [
-                        { "paperTitle":'', "abstract":'', "link":''}
+                        { "paperTitle":'No relative papers', "abstract":'', "link":''}
                     ]
             }
         print(json.dumps(j), end="")
@@ -90,30 +91,48 @@ def main(selection):
                 content2 = paper_content2[start-num:end]
             else:
                 content2 = paper_content2[start-num:end+num]
+    
 
     # dictionary
-    if len(paper_index) == 1:
+    if len(paper_index) == 1 and content != '':
         j = {
             "papers":
                     [
-                        { "paperTitle":file_list[paper_index[0] * 2], "abstract":content, "link":file_list[paper_index[0] * 2 + 1]},
+                        { "paperTitle":file_list[paper_index[0] * 2], "abstract":content, "link":file_list[paper_index[0] * 2 + 1]}
                     ]
         }
 
         # print out json
         print(json.dumps(j), end="")
-    elif len(paper_index) > 1:
+    elif len(paper_index) > 1 and content2 != '':
+        if content != '':
+            j = {
+                "papers":
+                        [
+                            { "paperTitle":file_list[paper_index[0] * 2], "abstract":content, "link":file_list[paper_index[0] * 2 + 1]},
+                            { "paperTitle":file_list[paper_index[1] * 2], "abstract":content2, "link":file_list[paper_index[1] * 2 + 1]}
+                        ]
+            }
+            print(json.dumps(j), end="")
+        if content == '':
+            j = {
+                "papers":
+                        [
+                            { "paperTitle":file_list[paper_index[1] * 2], "abstract":content2, "link":file_list[paper_index[1] * 2 + 1]}
+                        ]
+            }
+            print(json.dumps(j), end="")
+    elif content == '' and content2 == '':
         j = {
             "papers":
                     [
-                        { "paperTitle":file_list[paper_index[0] * 2], "abstract":content, "link":file_list[paper_index[0] * 2 + 1]},
-                        { "paperTitle":file_list[paper_index[1] * 2], "abstract":content2, "link":file_list[paper_index[1] * 2 + 1]}
+                        { "paperTitle":'No relative papers', "abstract":'', "link":''}
                     ]
         }
         print(json.dumps(j), end="")
     return
 
 if __name__ == '__main__':
-    selection = sys.argv[1]
-    # selection = "machine learning"
+    # selection = sys.argv[1]
+    selection = "retrival"
     main(selection)
