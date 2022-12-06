@@ -22,7 +22,12 @@ errors.textContent = "";
 const form = document.querySelector(".form-data");
 // grab the key words
 const textbox = document.querySelector(".textbox-input");
-
+//const textbox = document.getSelection().toString()(".textbox-input");
+chrome.tabs.executeScript( {
+  code: "window.getSelection().toString();"
+}, function(selection) {
+  document.getElementById("highlight").innerHTML = selection[0];
+});
 // declare a method to search by key words
 const searchForKeyWords = async textboxValue => {
   loading.style.display = "block";
