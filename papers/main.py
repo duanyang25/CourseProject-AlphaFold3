@@ -2,6 +2,7 @@ import numpy as np
 import platform
 import re
 import json
+import sys
 # For Windows
 delimiter = "\\"
 dict_path = r'.\pdfs'
@@ -113,6 +114,6 @@ def main(selection):
     return
 
 if __name__ == '__main__':
-    # selection = sys.argv[1]
-    selection = "machine learning"
+    selection = sys.argv[1]
+    # selection = "machine learning"
     main(selection)
