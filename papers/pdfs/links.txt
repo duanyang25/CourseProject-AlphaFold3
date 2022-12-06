@@ -18,8 +18,13 @@ Probabilistic Topic Models.
 https://dl.acm.org/doi/pdf/10.1145/2133806.2133826
 Automatic Labeling of Multinomial Topic Models
 https://dl-acm-org.proxy2.library.illinois.edu/doi/pdf/10.1145/1281192.1281246
-Investigating task performance of probabilistic topic models: and empirical study of PLSA and LDA
+Investigating task performance of probabilistic topic models- and empirical study of PLSA and LDA
 https://link-springer-com.proxy2.library.illinois.edu/content/pdf/10.1007/s10791-010-9141-9.pdf
 An Evaluation of Statistical Approaches to Text Categorization
 https://link-springer-com.proxy2.library.illinois.edu/content/pdf/10.1023/A:1009982220290.pdf
-
+Information Retrieval Evaluation
+https://doi.org/10.2200/S00368ED1V01Y201105ICR019)
+Test Collection Based Evaluation of Information Retrieval Systems
+http://dx.doi.org/10.1561/1500000009
+Methods for Evaluating Interactive Information Retrieval Systems with Users
+http://dx.doi.org/10.1561/1500000012

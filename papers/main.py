@@ -4,15 +4,15 @@ import re
 import json
 # For Windows
 delimiter = "\\"
-dict_path = r'.\papers\pdfs'
-txt_path = r'.\papers\txts'
+dict_path = r'.\pdfs'
+txt_path = r'.\txts'
 
 def main(selection):
     if platform.system().lower() != "windows":
         global dict_path 
-        dict_path = "./papers/pdfs"
+        dict_path = "./pdfs"
         global txt_path
-        txt_path = "./papers/txts"
+        txt_path = "./txts"
         global delimiter 
         delimiter = "/"
 
@@ -28,6 +28,7 @@ def main(selection):
         for i in range(len(vocab)):
             if word in vocab[i]:
                 paper_index.append(np.argmax(prob_matrix[:, i]))
+                print(prob_matrix[1,i], np.argmax(prob_matrix[:, i]))
                 flag = 1
                 break
     if flag == 0:
@@ -45,13 +46,15 @@ def main(selection):
     for line in file.readlines():
         line = line.strip('\n')
         file_list.append(line)
-    
+    # print(len(file_list), paper_index[0] * 2)
     doc_name1 = file_list[paper_index[0] * 2] + '.txt'
     relative_paper = open(txt_path + delimiter + doc_name1, 'r', encoding='utf-8')
     paper_content = ''
     for line in relative_paper.readlines():
         line = line.strip('\n')
         paper_content += line
+    # with open(txt_path + delimiter + doc_name1, 'r', encoding='utf-8') as f:
+    #     paper_content = f.read().replace('\n', '')
     
     num = 200
     for m in re.finditer(query_words[0], paper_content):
@@ -65,6 +68,7 @@ def main(selection):
             content = paper_content[start-num:end]
         else:
             content = paper_content[start-num:end+num]
+    # print(paper_content)
 
     if len(paper_index) > 1:
         doc_name2 = file_list[paper_index[1] * 2] + '.txt'
