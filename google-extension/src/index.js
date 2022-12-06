@@ -22,17 +22,23 @@ errors.textContent = "";
 const form = document.querySelector(".form-data");
 // grab the key words
 const textbox = document.querySelector(".textbox-input");
-//const textbox = document.getSelection().toString()(".textbox-input");
+
+// obtain the user's selection with their mouse
 chrome.tabs.executeScript( {
   code: "window.getSelection().toString();"
 }, function(selection) {
   document.getElementById("highlight").innerHTML = selection[0];
+
+  // https://stackoverflow.com/questions/11770858/setting-html-textbox-value-using-javascript-function
+  document.querySelector(".textbox-input").value = selection[0];
 });
+
 // declare a method to search by key words
 const searchForKeyWords = async textboxValue => {
   loading.style.display = "block";
   errors.textContent = "";
 
+  // visit the server's API
   try {
     const stringResponse = await axios({
       method: 'post',
@@ -46,7 +52,7 @@ const searchForKeyWords = async textboxValue => {
 
     selection.textContent = jsonResponse["selection"];
 
-    // papers.textContent = jsonResponse["relevantPapers"];
+    // set the list of HTML for relevant papers
     let text = '';
     jsonResponse["relevantPapers"].forEach((ele, ind) =>{
       if (ind<5){
@@ -54,46 +60,33 @@ const searchForKeyWords = async textboxValue => {
         text += '<p><a href='+ ele.link +'target=\"_blank\">'+ ele.paperTitle + '</a>'+ 
                 ': ' + ele.abstract + '</p>';
       }
-        // console.log(ele);
-      //  text += `${ele.paperTitle.slice(0, 30)}
-      //           ${ele.abstract.slice(0, 30) }
-      //           ${ele.link.slice(0, 30) } `;
-          // text +=  ele.paperTitle.slice(0, 30) + "\n" +
-          //          ele.abstract.slice(0, 30) + "\n" +
-          //          ele.link.slice(0, 30)+ "\n"  ;
     })
-    // papers.textContent = text;
     papers.textContent = 'Relevant Papers:' ;
     document.getElementById("papersroutput").innerHTML = text;
 
-    // scholar.textContent = jsonResponse["scholarResults"];
+    // set the list of HTML for Google Scholar results
     let text1 = '';
-        jsonResponse["scholarResults"].forEach((ele, ind) =>{
-          if (ind<5){
-            console.log(ele);
-            text1 += '<p><a href='+ ele.link +'target=\"_blank\">'+ ele.title + '</a>'+ 
-                      ': ' + ele.snippet + 
-                      '----' + ele.publication_info + '</p>';
-          }
-            // console.log(ele);
-            // text1 += ` ${ele.title.slice(0, 20)}
-            //            ${ele.link.slice(0, 20)}
-            //           ${ele.publication_info.slice(0, 20)}
-            //           ${ele.snippet.slice(0, 20)}`;
-        })
-    // scholar.textContent = text1;
+    jsonResponse["scholarResults"].forEach((ele, ind) =>{
+      if (ind<5){
+        console.log(ele);
+        text1 += '<p><a href='+ ele.link +'target=\"_blank\">'+ ele.title + '</a>'+ 
+                  ': ' + ele.snippet + 
+                  '----' + ele.publication_info + '</p>';
+      }
+    })
+    
     scholar.textContent = 'Google Scholar Results:' ;
     document.getElementById("scholaroutput").innerHTML = text1;
 
-
+    // set the list of HTML for Google Search results
     let text2 = '';
-        jsonResponse["googleResult"].forEach((ele, ind) =>{
-          if (ind<5){
-            console.log(ele);
-            text2 += '<p><a href='+ ele.links +'target=\"top\">'+ ele.title + '</a>'+ 
-                      ': ' + ele.snippet + '</p>';
-          }
-        })
+    jsonResponse["googleResult"].forEach((ele, ind) =>{
+      if (ind<5){
+        console.log(ele);
+        text2 += '<p><a href='+ ele.links +'target=\"top\">'+ ele.title + '</a>'+ 
+                  ': ' + ele.snippet + '</p>';
+      }
+    })
     google.textContent = 'Google Search Results:' ;
     document.getElementById("googleoutput").innerHTML = text2;
 

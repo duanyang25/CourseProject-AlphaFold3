@@ -15,7 +15,7 @@
     </div>
     <div id="highlight"></div>
     <div>
-        <input type="text" class="textbox-input"/>
+        <input type="text" class="textbox-input" id="box"/>
     </div>
     <button class="search-btn">Search Text</button>
 </form>
@@ -25,6 +25,7 @@
     <div class="data"></div>
     <div class="result-container">
         <p><strong>Input Words: </strong><span class="selection"></span></p>
+        
         <p>
         <details>
             <summary><strong class="papers"></strong></summary>
@@ -33,7 +34,6 @@
         </p>
     
         <p>
-                <!-- <strong>Google Scholar Results: </strong> <span class="scholar"></span> -->
         <details>
             <summary><strong class="scholar"></strong></summary>
             <div id="scholaroutput"></div> 
@@ -41,10 +41,8 @@
         </p>
     
         <p>
-                <!-- <strong>Google Search Results: </strong> <span class="google"></span> -->
         <details>
             <summary><strong class="google"></strong></summary>
-            <!-- <div class="google"></div> -->
             <div id="googleoutput"></div> 
         </details>
         </p>
