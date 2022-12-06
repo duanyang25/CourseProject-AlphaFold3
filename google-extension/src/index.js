@@ -38,6 +38,7 @@ const searchForKeyWords = async textboxValue => {
   loading.style.display = "block";
   errors.textContent = "";
 
+  textboxValue = textboxValue.replace(/[\r\n]+/gm,"");
   // visit the server's API
   try {
     const stringResponse = await axios({
