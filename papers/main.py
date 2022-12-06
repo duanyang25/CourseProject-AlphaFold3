@@ -2,6 +2,7 @@ import numpy as np
 import platform
 import re
 import json
+import sys
 # For Windows
 delimiter = "\\"
 dict_path = r'.\pdfs'
