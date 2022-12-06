@@ -57,8 +57,8 @@ const searchForKeyWords = async textboxValue => {
     jsonResponse["relevantPapers"].forEach((ele, ind) =>{
       if (ind<5){
         console.log(ele);
-        text += '<p><a href='+ ele.link +'target=\"_blank\">'+ ele.paperTitle + '</a>'+ 
-                ': ' + ele.abstract + '</p>';
+        text += '<p><a href=\"'+ ele.link +'\" target=\"_blank\">'+ ele.paperTitle + '</a>' + 
+                '<br><b>Abstract:</b> ' + ele.abstract + '</p>';
       }
     })
     papers.textContent = 'Relevant Papers:' ;
@@ -69,9 +69,9 @@ const searchForKeyWords = async textboxValue => {
     jsonResponse["scholarResults"].forEach((ele, ind) =>{
       if (ind<5){
         console.log(ele);
-        text1 += '<p><a href='+ ele.link +'target=\"_blank\">'+ ele.title + '</a>'+ 
-                  ': ' + ele.snippet + 
-                  '----' + ele.publication_info + '</p>';
+        text1 += '<p><a href=\"'+ ele.link +'\" target=\"_blank\">'+ ele.title + '</a>' +
+                  '<br><b>Snippet:</b> ' + ele.snippet +
+                  '<br><b>Publication_info:</b> ' + ele.publication_info + '</p>';
       }
     })
     
@@ -83,8 +83,8 @@ const searchForKeyWords = async textboxValue => {
     jsonResponse["googleResult"].forEach((ele, ind) =>{
       if (ind<5){
         console.log(ele);
-        text2 += '<p><a href='+ ele.links +'target=\"top\">'+ ele.title + '</a>'+ 
-                  ': ' + ele.snippet + '</p>';
+        text2 += '<p><a href=\"'+ ele.link +'\" target=\"top\">'+ ele.title + '</a>' + 
+                  '<br><b>Snippet:</b> ' + ele.snippet + '</p>';
       }
     })
     google.textContent = 'Google Search Results:' ;
