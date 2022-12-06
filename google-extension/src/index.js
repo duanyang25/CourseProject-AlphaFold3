@@ -83,7 +83,7 @@ const searchForKeyWords = async textboxValue => {
     jsonResponse["googleResult"].forEach((ele, ind) =>{
       if (ind<5){
         console.log(ele);
-        text2 += '<p><a href=\"'+ ele.link +'\" target=\"top\">'+ ele.title + '</a>' + 
+        text2 += '<p><a href=\"'+ ele.link +'\" target=\"_blank\">'+ ele.title + '</a>' + 
                   '<br><b>Snippet:</b> ' + ele.snippet + '</p>';
       }
     })
