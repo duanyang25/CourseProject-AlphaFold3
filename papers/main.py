@@ -71,6 +71,27 @@ def main(selection):
         else:
             content = paper_content[start-num:end+num]
     # print(paper_content)
+    if content == '':
+        for i in range(15):
+            with open(txt_path + delimiter + file_list[i * 2] + '.txt', 'r', encoding='utf-8') as f:
+                paper_cont = f.read().replace('\n', '')
+                if query_words[0] in paper_cont:
+                    paper_index[0] = i
+                    for m in re.finditer(query_words[0], paper_cont):
+                        start = m.start()
+                        end = m.end()
+                        if (m.start() - num) < 0:
+                            start = 0
+                            content = paper_cont[start:end+num]
+                        elif (m.end() + num) > len(paper_cont):
+                            end = len(paper_cont) - 1
+                            content = paper_cont[start-num:end]
+                        else:
+                            content = paper_cont[start-num:end+num]
+                    # print(content)
+                    break
+
+
 
     if len(paper_index) > 1:
         doc_name2 = file_list[paper_index[1] * 2] + '.txt'
@@ -104,6 +125,15 @@ def main(selection):
 
         # print out json
         print(json.dumps(j), end="")
+    elif len(paper_index) > 1 and content2 == '':
+        if content != '':
+            j = {
+                "papers":
+                        [
+                            { "paperTitle":file_list[paper_index[0] * 2], "abstract":content, "link":file_list[paper_index[0] * 2 + 1]}
+                        ]
+            }
+            print(json.dumps(j), end="")
     elif len(paper_index) > 1 and content2 != '':
         if content != '':
             j = {
@@ -134,5 +164,5 @@ def main(selection):
 
 if __name__ == '__main__':
     # selection = sys.argv[1]
-    selection = "retrival"
+    selection = "machine learning"
     main(selection)
