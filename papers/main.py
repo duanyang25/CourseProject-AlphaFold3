@@ -1,3 +1,9 @@
+# Main.py has the query sentences as input and print the relative paper titles, a part of content related to query, 
+# and the paper links to the backend program. We segment the query sentences into word level, and compute the 
+# probability of combination of these words utilizing the probability matrix produced by our PLSA model. Then 
+# we will choose one or two papers which have the highest relevance scores as relative papers. Then we find 
+# the context of the query sentence appearing in the paper content. We print the titles, the context content, 
+# and paper links to our server to let it show on our extension.
 import numpy as np
 import platform
 import re

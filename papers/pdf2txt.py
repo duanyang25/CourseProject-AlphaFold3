@@ -1,9 +1,16 @@
+# The first task of building the PLSA model is to pre-process the paper documents. We have downloaded all the papers 
+# mentioned in the lecture as pdf files. We need to reformat the papers from pdf documents to txt documents, which can 
+# be easily read by python. In fact, the difficulty is that many papers have subfields (columns), which are hard to 
+# process. The Optical Character Recognition (OCR) method is hard to implement and does not have a good performance 
+# for our dataset. We utilized the tree hierarchy of html documents to distinguish different parts of paper documents. 
+# In pdf2txt.py, we traverse the folder which contains the paper documents and reformat them from pdf file to html file. 
+# Then we extract the content in html file and save as txt file. In that case the paper content can be read by our PLSA 
+# model. We already run pdf2txt.py and produced the txt files of papers, so that users do not need to run it again.
 import fitz
 from tqdm import tqdm
 from bs4 import BeautifulSoup
 import re
 import os
-
 import platform
 
 # For Windows
@@ -11,7 +18,7 @@ delimiter = "\\"
 dict_path = r'.\papers\pdfs'
 html_path = r'.\papers\html'
 txt_path = r'.\papers\txts'
-
+# Traverse the folder which contains the paper documents, save the path and name of them
 def pdflist(dict_path, html_path):
     file_list = []
     html_name_list = []
@@ -28,6 +35,8 @@ def pdflist(dict_path, html_path):
                 html_name_list.append(html_path + delimiter + file.replace('.PDF', '.html'))
     return file_list, txt_name_list, html_name_list
 
+#reformat paper documents from pdf to html. The method that reformat pdf files from pdf to html, then extract the content and 
+#save it as txt is learned from https://www.bilibili.com/read/cv16356882
 def pdf2html(input_path, html_path):
     doc = fitz.open(input_path)
     # print(doc)
@@ -38,6 +47,7 @@ def pdf2html(input_path, html_path):
     with open(html_path, 'w', encoding = 'utf-8', newline='')as fp:
         fp.write(html_content)
 
+#Save paper content as txt based on html
 def html2txt(html_path, txt_name):
     hfile = open(html_path, 'r', encoding = 'utf-8')
     htmlhandle = hfile.read()

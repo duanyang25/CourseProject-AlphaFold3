@@ -1,3 +1,11 @@
+# Plsa file contains our model, which is modified based on MP3. We used PLSA model to compute the relevance 
+# between query sentences and paper documents. For the parameters, we choose 10 topics and iterate to 
+# likelihood convergence with maximum iteration of 100. The PLSA model will compute the probability 
+# matrix of words occurred in documents when converged.The probability matrix has a shape of (number 
+# of vocabulary, number of documents). The model can save the probability matrix and the vocabulary as 
+# two txt files, which can be used in main.py to find the relative papers based on query sentences. PLSA 
+# model is already trained and adjust in plsa.py, and the prob_matrix.txt and vocabulary.txt have already 
+# produced, so users do not need to run it again.
 import numpy as np
 import math
 import os
