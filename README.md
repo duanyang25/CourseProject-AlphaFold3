@@ -149,4 +149,4 @@ node index.js
 
 2. Also, there is a slight limitation on the time use (rate limiting) of the google extension. Since Google Scholar / Google Search may block the IP address for a period of time if too many requests are sent in a given amount of time without passing Google's reCAPTCHA test, the server program may return the code 429. In this case, some results cannot be retrieved from Google and thus displayed by our extension due to the temporary block by Google.
 
-3. We now only support English words, but it maybe support all UTF-8 symbols.
+3. We now only support and test English words, but it maybe support all UTF-8 symbols.
