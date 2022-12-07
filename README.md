@@ -46,7 +46,7 @@ The theme of our project is Google Chrome Extension for paper suggestions based 
 - The google-extension folder contains both the compiled scripts in the dist folder and the source code in src folder. By following the online project mentioned above, we put the HTML file and icon images into the dist folder as well.
     - The extension first captures the highlighted words of users and sends it to the server via HTTP connections. After receiving the output from the server, it changes the HTML file to display the results.
 - The server folder contains our dependency list and the source code files. 
-    - The server basically sets up a HTTP server and listens to the request from our Google Chrome Extension. After receiving the request, it creates a subprocess to run the Machine Learning prediction program and sends request to Google Scholar and Google Search. With the 
+    - The server basically sets up a HTTP server and listens to the request from our Google Chrome Extension. After receiving the request, it creates a subprocess to run the Machine Learning prediction program and sends request to Google Scholar and Google Search. With this retrieved information, it sends the response containing these three outputs by JSON to the extension.
 In addition to the detailed code structure or architecture for our project demonstrated by the attached diagram above, we explain the process of our pre-trained PLSA model in the following:
 ### Machine Learning
 #### Pdf2txt.py 
