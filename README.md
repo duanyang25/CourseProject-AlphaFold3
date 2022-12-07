@@ -1,5 +1,5 @@
 # Course Project of AlphaFold3
-The link to our demo video: https://youtu.be/PclKDKX-KNA
+The link to our demo video [the first half is for Macbook users, the second half is for Windows users]: https://youtu.be/PclKDKX-KNA
 
 ## Table of Contents
 **[Overview](#Overview)**<br>
