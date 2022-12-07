@@ -9,9 +9,6 @@
 **[Disclaimer](#Disclaimer)**<br>
 
 
-There is no specific format required for documentation due to the large variation in project types. Generally, helpful documentation should include (1) an overview of the project, (2) team member contributions, (3) related work and used libraries/models/previous projects, if any, (4) some sort of code structure or architecture diagram, and (5) detailed instructions for reviewers to set up and run code, including possible errors or blockers. The documentation need not be a separate document, but can be in the readme.
-
-
 ## Overview
 ### Group Information
 - Group name: AlphaFold3
