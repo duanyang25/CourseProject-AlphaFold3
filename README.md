@@ -21,7 +21,7 @@ The theme of our project is Google Chrome Extension for paper suggestions based 
 - Yang Duan (yangd4), mainly worked on the server program and a part of the Chrome Extension.
 - Chongyu Wang (chongyu4), pre-process the paper documents, build and adjust the PLSA model, find the relative papers of query sentences based on PLSA model.
 - Haoyu Su (haoyus2), mainly worked on the Chrome Extension of display, typesetting and link production.
-- Yulei Li (yuleili2), downloaded most of the lecture-mentioned papers and worked on a part of the Chrome Extension.
+- Yulei Li (yuleili2), downloaded most of the lecture-mentioned papers and mainly worked on the Chrome Extension with HTML and scripts.
 - Jiaye Wang (jiayew3), mainly worked on the Chrome Extension and the highlight getSelection functionality.
 
 ## Related Work
