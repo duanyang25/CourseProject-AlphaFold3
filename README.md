@@ -148,3 +148,5 @@ node index.js
 1. There is a slight limitation on the highlighted / entered text: the highlight get selection feature may not work on certain PDFs that are opened on the chrome. Also, in case of certain special characters (Eg: certain new line characters), the result may display "error".
 
 2. Also, there is a slight limitation on the time use (rate limiting) of the google extension. Since Google Scholar / Google Search may block the IP address for a period of time if too many requests are sent in a given amount of time without passing Google's reCAPTCHA test, the server program may return the code 429. In this case, some results cannot be retrieved from Google and thus displayed by our extension due to the temporary block by Google.
+
+3. We now only support English words, but it maybe support all UTF-8 symbols.
