@@ -22,13 +22,26 @@ The theme of our project is Google Chrome Extension for paper suggestions based 
 
 ## Team Member Contribution
 - Yang Duan (yangd4), mainly worked on the server program and a part of the Chrome Extension.
-- Chongyu Wang (chongyu4), pre-process the 
-- Haoyu Su (haoyus2), 
-- Yulei Li (yuleili2), 
-- Jiaye Wang (jiayew3), 
+- Chongyu Wang (chongyu4), pre-process the paper documents, build and adjust the PLSA model, find the relative papers of query sentences based on PLSA model.
+- Haoyu Su (haoyus2), mainly worked on the Chrome Extension of display, typesetting and link production.
+- Yulei Li (yuleili2), downloaded most of the lecture-mentioned papers and worked on a part of the Chrome Extension.
+- Jiaye Wang (jiayew3), mainly worked on the Chrome Extension and the highlight getSelection functionality.
 
 ## Related Work
+### Machine Learning
+- Our PLSA model is modified and trained based on MP3.
+- Main library used: NumPy, BeautifulSoup, os, json.
 
+### Server
+- It is mainly implemented in JavaScript and running by Node.js. 
+- It utilizes a lot of standard libraries provided by Node.js and libraries distributed by npm. Some of them are http, url, path, request, and cheerio.
+- We referred to many online tutorials and blogs while developing our server program. The links of them are commented inside our code files.
+
+### Chrome Extension
+- It is mainly implemented in JavaScript.
+- It utilized Google Chrome APIs.
+- We developed this extension based on the project shared by TAs on CampusWire. https://dev.to/debosthefirst/how-to-build-a-chrome-extension-that-makes-api-calls-1g04
+- We referred to many online tutorials and blogs while developing our extension. The links of them are commented inside our code files.
 
 ## Technical Architecture
 ### Architecture Diagram
@@ -37,20 +50,28 @@ The theme of our project is Google Chrome Extension for paper suggestions based 
 In addition to the detailed code structure or architecture for our project demonstrated by the attached diagram above, we explain the process of our pre-trained PLSA model in the following:
 ### Machine Learning
 #### Pdf2txt.py 
-The first task of building the PLSA model is to pre-process the paper documents. We have downloaded all the papers mentioned in the lecture as pdf files. We need to reformat the papers from pdf documents to txt documents, which can be easily read by python. In fact, the difficulty is that many papers have subfields (columns), which are hard to process. The Optical Character Recognition (OCR) method is hard to implement and does not have a good performance for our dataset. We utilized the tree hierarchy of html documents to distinguish different parts of paper documents. In pdf2txt.py, we traverse the folder which contains the paper documents and reformat them from pdf file to html file. Then we extract the content in html file and save as txt file. In that case the paper content can be read by our PLSA model.
+The first task of building the PLSA model is to pre-process the paper documents. We have downloaded all the papers mentioned in the lecture as pdf files. We need to reformat the papers from pdf documents to txt documents, which can be easily read by python. In fact, the difficulty is that many papers have subfields (columns), which are hard to process. The Optical Character Recognition (OCR) method is hard to implement and does not have a good performance for our dataset. We utilized the tree hierarchy of html documents to distinguish different parts of paper documents. In pdf2txt.py, we traverse the folder which contains the paper documents and reformat them from pdf file to html file. Then we extract the content in html file and save as txt file. In that case the paper content can be read by our PLSA model. We already run pdf2txt.py and produced the txt files of papers, so that users do not need to run it again.
 #### Plsa.py
 Plsa file contains our model, which is modified based on MP3. We used PLSA model to compute the relevance between query sentences and paper documents. For the parameters, we choose 10 topics and iterate to likelihood convergence with maximum iteration of 100. The PLSA model will compute the probability matrix of words occurred in documents when converged: 
 $$ P(w) = \sum_{i=j}^k\pi_{d, j} P(w|\theta_j)$$
-The probability matrix has a shape of (number of vocabulary, number of documents). The model will save the probability matrix and the vocabulary as two txt files, which can be used in main.py to find the relative papers based on query sentences.
+The probability matrix has a shape of (number of vocabulary, number of documents). The model can save the probability matrix and the vocabulary as two txt files, which can be used in main.py to find the relative papers based on query sentences. PLSA model is already trained and adjust in plsa.py, and the prob_matrix.txt and vocabulary.txt have already produced, so users do not need to run it again.
 #### Main.py
 Main.py has the query sentences as input and print the relative paper titles, a part of content related to query, and the paper links to the backend program. We segment the query sentences into word level, and compute the probability of combination of these words utilizing the probability matrix produced by our PLSA model. Then we will choose one or two papers which have the highest relevance scores as relative papers. Then we find the context of the query sentence appearing in the paper content. We print the titles, the context content, and paper links to our server to let it show on our extension.
 
 ## Installation and Usage
 ### Installation
-Python Version = 3.8  
+Requirement: 
+- Python Version >= 3.5 and 
+- Numpy installed
+```Bash
+python --version
+```
+```Bash
+pip install numpy
+```
 We implement and run programs in the following sequence.
 
-#### Windows
+#### Windows 
 1. Download Node.js and install from (https://nodejs.org/en/download/)
 2. Clone the repository
 ```
@@ -113,73 +134,16 @@ node index.js
 
 ### Usage
 1. Pin the extension on google chrome
+
 2. On the web page, high light the text that you want to search for
-3. Click open the extension, the high light text should be displayed in the textbox, you can also manually enter the text infomation
-4. Click the "SearchText" button, then the search result will be displayed
+
+3. Click open the extension, the high light text should be displayed in the textbox, you can also manually change it or enter new text information
+
+4. Click the "Search Text" button, then the input text and the result will be displayed.
+
+5. The result is consist of 3 parts. The first part will be the relevant papers suggestions from all mentioned papers in the course CS410. The second part will be the relevant paper suggestions from google scholar based on the inputed search text. The third part will be the relevant google search results based on the inputed search text.
+
 ## Disclaimer
 1. There is a slight limitation on the highlighted / entered text:    the highlight get selection feature may not work on certain PDFs that are opened on the chrome. Also, in case of certain special characters (Eg: certain new line characters), the result may display "error".
 
-
-
-
-
-
-
-
-
-
-#### Text converter
-1. Install all necessary packages
-```python
-pip install -r requirements.txt  
-```
-2. Under the root folder of this project, run:
-```python
-# Mac OS / Linux
-python ./papers/pdf2txt.py
-```
-OR
-```python
-# Windows
-python .\papers\pdf2txt.py
-```
-#### Ranking algorithm
-```python
-python ./papers/plsa.py "<input words>"
-```
-#### Server
-```
-npm install
-```
-```
-node index.js
-```
-#### Chrome Extension
-1. install Node.js and npm first
-2. change the current directory to `google-extension`
-3. run
-
-```
-npm install
-```
-```
-export NODE_OPTIONS=--openssl-legacy-provider
-npm run build
-```
-For windows cmd, run:
-
-if on power shell, run: 
-```
-$env:NODE_OPTIONS = "--openssl-legacy-provider"
-```
-if on command prompot, run: 
-```
-set NODE_OPTIONS=--openssl-legacy-provider
-```
-then, run
-```
-npm run build
-```
-
-4. visit `chrome://extensions/` in your Chrome Browser
-5. click `Load unpacked` on the top left side and select the `dist` folder in the current directory
+2. Also, there is a slight limitation on the time use(rate limiting) of the google extension. Since the request from the server may retruned with code 429 from google scolar/ goole search due to too may request in a given amount of time.
