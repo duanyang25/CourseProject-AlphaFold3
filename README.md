@@ -141,9 +141,9 @@ node index.js
 
 4. Click the "Search Text" button, then the input text and the result will be displayed.
 
-5. The result is consist of 3 parts. The first part will be the relevant papers suggestions from all mentioned papers in the course CS410. The second part will be the relevant paper suggestions from google scholar based on the inputed search text. The third part will be the relevant google search results based on the inputed search text. You can click the triangle to expand the lists of them.
+5. The result is consist of 3 parts. The first part will be the relevant papers suggestions from all mentioned papers in the course CS410. The second part will be the relevant paper suggestions from google scholar based on the inputed search text. The third part will be the relevant google search results based on the inputed search text. You can click the triangle or the bold headings to expand the lists of them.
 
 ## Disclaimer
-1. There is a slight limitation on the highlighted / entered text:    the highlight get selection feature may not work on certain PDFs that are opened on the chrome. Also, in case of certain special characters (Eg: certain new line characters), the result may display "error".
+1. There is a slight limitation on the highlighted / entered text: the highlight get selection feature may not work on certain PDFs that are opened on the chrome. Also, in case of certain special characters (Eg: certain new line characters), the result may display "error".
 
-2. Also, there is a slight limitation on the time use(rate limiting) of the google extension. Since the request from the server may retruned with code 429 from Google Scholar / Goole Search due to too may requests in a given amount of time.
+2. Also, there is a slight limitation on the time use (rate limiting) of the google extension. Since Google Scholar / Google Search may block the IP address for a period of time if too many requests are sent in a given amount of time without passing Google's reCAPTCHA test, the server program may return the code 429. In this case, some results cannot be retrieved from Google and thus displayed by our extension due to the temporary block by Google.
