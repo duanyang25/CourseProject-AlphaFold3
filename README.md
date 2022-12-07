@@ -1,4 +1,5 @@
 # Course Project of AlphaFold3
+The link to our demo video: https://youtu.be/PclKDKX-KNA
 
 ## Table of Contents
 **[Overview](#Overview)**<br>
